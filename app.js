@@ -1,11 +1,22 @@
 require("dotenv").config();
+require("express-async-errors");
 const express = require("express");
 const app = express();
 const authrouter = require("./routes/auth");
 
+//security
+const cors = require("cors");
+
+app.use(cors());
 app.use(express.json());
+
 //routers
 app.use("/api/v1/auth", authrouter);
+
+// error handler
+const errorHandlerMiddleware = require("./middlewares/error-handler");
+app.use(errorHandlerMiddleware);
+
 //connectDB
 const connectDB = require("./db/connect");
 
