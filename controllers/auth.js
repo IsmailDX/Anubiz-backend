@@ -28,6 +28,7 @@ const register = async (req, res) => {
             <td style="text-align: center;">
                 <img src="https://scontent.ffjr1-5.fna.fbcdn.net/v/t39.30808-6/431622392_6958317874280205_5274981637888368039_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=3635dc&_nc_ohc=sb5MslAcndUAX9rcSFL&_nc_ht=scontent.ffjr1-5.fna&oh=00_AfAx3Fn3P179em-Ep6w9Vk3Dgu1r275mmvmyR_Eir4D9ag&oe=65EC0F09" style="max-width: 120px;" />
                 <h2 style="color: #333;">Click <a href='${url}'>here</a> to confirm your email.</h2>
+                <h3>Please refrain from clicking the link if you did not register on Anubiz.</h3>
             </td>
         </tr>
     </table>
