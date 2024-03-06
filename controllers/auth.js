@@ -17,7 +17,7 @@ const register = async (req, res) => {
   try {
     const user = await User.create({ ...req.body });
     const token = user.createJWT();
-    const url = `http://localhost:3000/api/v1/auth/verify/${token}`;
+    const url = `http://localhost:3000/auth/api/v1/verify/${token}`;
 
     transporter.sendMail({
       to: user.email,
