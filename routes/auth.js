@@ -2,7 +2,13 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 
-const { register, login, verify } = require("../controllers/auth");
+const {
+  register,
+  login,
+  verify,
+  forgotPassword,
+  resetPassword,
+} = require("../controllers/auth");
 
 router.route("/api/v1/register").post(register);
 router.route("/api/v1/login").post(login);
@@ -21,5 +27,9 @@ router.get(
     res.redirect("/");
   }
 );
+
+//reset password
+router.post("/forgotPassword", forgotPassword);
+router.put("/resetPassword/:resetToken", resetPassword);
 
 module.exports = router;

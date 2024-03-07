@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, UnauthenticatedError } = require("../errors");
+const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 
@@ -122,4 +123,79 @@ const verify = async (req, res) => {
   }
 };
 
-module.exports = { register, login, verify };
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    throw new BadRequestError("Please provide email");
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new UnauthenticatedError("User does not exist");
+  }
+
+  // Generate reset token
+  const resetToken = jwt.sign({ userID: user._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_LIFETIME,
+  });
+
+  // Save reset token in the user document
+  user.resetToken = resetToken;
+  await user.save();
+
+  // Send reset email
+  const resetUrl = `http://localhost:3000/auth/resetPassword/${resetToken}`;
+  transporter.sendMail({
+    to: user.email,
+    subject: "Reset Password",
+    text: `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to:\n\n${resetUrl}`,
+  });
+
+  res.status(StatusCodes.OK).json({
+    message: "Reset password email sent successfully",
+  });
+};
+
+const resetPassword = async (req, res) => {
+  const { resetToken } = req.params;
+  const { newPassword } = req.body;
+
+  try {
+    if (!resetToken || !newPassword) {
+      throw new BadRequestError("Reset token and new password are required");
+    }
+
+    // Verify and decode reset token
+    const decoded = jwt.verify(resetToken, process.env.JWT_SECRET);
+
+    // Find user by user ID from decoded token
+    const user = await User.findById(decoded.userID);
+
+    if (!user) {
+      throw new UnauthenticatedError("Invalid reset token");
+    }
+
+    // Ensure the reset token matches the one saved in the user document
+    if (user.resetToken !== resetToken) {
+      throw new UnauthenticatedError("Invalid reset token");
+    }
+
+    // Update user's password
+    user.password = newPassword;
+
+    // Clear reset token
+    user.resetToken = undefined;
+    await user.save();
+
+    res.status(StatusCodes.OK).json({
+      message: "Password reset successful",
+    });
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    throw new UnauthenticatedError("Invalid reset token");
+  }
+};
+
+module.exports = { register, login, verify, forgotPassword, resetPassword };

@@ -30,6 +30,7 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     sparse: true,
   },
+  resetToken: String,
 });
 
 UserSchema.pre("save", async function (next) {
