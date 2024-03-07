@@ -146,11 +146,11 @@ const forgotPassword = async (req, res) => {
   await user.save();
 
   // Send reset email
-  const resetUrl = `http://localhost:3000/auth/resetPassword/${resetToken}`;
+  const resetUrl = `http://localhost:3001/resetPass/${resetToken}`;
   transporter.sendMail({
     to: user.email,
     subject: "Reset Password",
-    text: `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to:\n\n${resetUrl}`,
+    text: `You are receiving this email because you (or someone else) has requested the reset of a password. Please click this link to reset password:\n\n${resetUrl}`,
   });
 
   res.status(StatusCodes.OK).json({
