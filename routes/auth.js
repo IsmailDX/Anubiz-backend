@@ -22,12 +22,17 @@ router.get(
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
-  (req, res) => {
-    res.redirect("/");
-  }
+  passport.authenticate("google", {
+    failureRedirect: "http://localhost:3001/",
+    successRedirect: "http://localhost:3001/home",
+  })
 );
 
+// logout google
+router.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect("http://localhost:3001/home");
+});
 //reset password
 router.post("/forgotPassword", forgotPassword);
 router.put("/resetPassword/:resetToken", resetPassword);

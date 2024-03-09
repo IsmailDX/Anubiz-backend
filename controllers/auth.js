@@ -1,7 +1,6 @@
 const User = require("../models/User");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, UnauthenticatedError } = require("../errors");
-const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 
@@ -27,7 +26,7 @@ const register = async (req, res) => {
     <table style="max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 8px; padding: 40px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
         <tr>
             <td style="text-align: center;">
-                <img src="https://scontent.ffjr1-5.fna.fbcdn.net/v/t39.30808-6/431622392_6958317874280205_5274981637888368039_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=3635dc&_nc_ohc=sb5MslAcndUAX9rcSFL&_nc_ht=scontent.ffjr1-5.fna&oh=00_AfAx3Fn3P179em-Ep6w9Vk3Dgu1r275mmvmyR_Eir4D9ag&oe=65EC0F09" style="max-width: 120px;" />
+                <img src="https://i.imgur.com/H4SyjFc.png" style="max-width: 120px;" />
                 <h2 style="color: #333;">Click <a href='${url}'>here</a> to confirm your email.</h2>
                 <h3>Please refrain from clicking the link if you did not register on Anubiz.</h3>
             </td>

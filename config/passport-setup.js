@@ -1,5 +1,7 @@
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../models/User");
+const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
 
 module.exports = function (passport) {
   passport.use(
@@ -13,15 +15,18 @@ module.exports = function (passport) {
         try {
           // Check if user exists in the database
           let user = await User.findOne({ email: profile.emails[0].value });
+          const randomPassword = crypto.randomBytes(8).toString("hex");
           // If user doesn't exist, create a new one
           if (!user) {
             user = await User.create({
               googleId: profile.id,
               name: profile.displayName,
               email: profile.emails[0].value,
+              password: randomPassword,
               verified: true,
             });
           }
+
           return done(null, user);
         } catch (error) {
           return done(error);
