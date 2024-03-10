@@ -31,6 +31,7 @@ router.get(
 // logout google
 router.get("/logout", (req, res) => {
   req.logout();
+  req.session.destroy();
   res.redirect("http://localhost:3001/home");
 });
 //reset password

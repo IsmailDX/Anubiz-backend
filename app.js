@@ -8,7 +8,6 @@ const authrouter = require("./routes/auth");
 const itemsrouter = require("./routes/items");
 
 //session
-const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 
@@ -18,14 +17,18 @@ require("./config/passport-setup")(passport);
 
 //security
 const cors = require("cors");
-
-app.use(cors());
+const corsOptions = {
+  origin: "http://localhost:3001",
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 //middleware
 const errorHandlerMiddleware = require("./middlewares/error-handler");
 app.use(errorHandlerMiddleware);
-const authenticateUser = require("./middlewares/authentication");
+const authGoogle = require("./middlewares/authGoogle");
 
 //connectDB
 const connectDB = require("./db/connect");
@@ -35,7 +38,8 @@ app.use(
   session({
     secret: "keyboard cat",
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
     store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
   })
 );
@@ -45,11 +49,7 @@ app.use(passport.session());
 
 //routers
 app.use("/auth", authrouter);
-app.use("/home", authenticateUser, itemsrouter);
-
-app.get("/", (req, res) => {
-  res.send("Hello there!");
-});
+app.use("/home", authGoogle, itemsrouter);
 
 const port = process.env.PORT || 3000;
 
