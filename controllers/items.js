@@ -1,9 +1,10 @@
 const { StatusCodes } = require("http-status-codes");
-const User = require("../models/User");
+const Products = require("../models/product");
 
-const getAllItems = async (req, res) => {
+const getAllProducts = async (req, res) => {
   let name = req.user.name;
-  res.status(StatusCodes.OK).json({ user: { name: name } });
+  const products = await Products.find({});
+  res.status(StatusCodes.OK).json({ user: { name: name }, products });
 };
 
-module.exports = { getAllItems };
+module.exports = { getAllProducts };

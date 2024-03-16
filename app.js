@@ -9,7 +9,6 @@ const itemsrouter = require("./routes/items");
 
 //session
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
 
 //google authentication
 const passport = require("passport");
@@ -40,7 +39,6 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false },
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
   })
 );
 
