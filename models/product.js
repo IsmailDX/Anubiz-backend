@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const itemSchema = new mongoose.Schema({
+const productSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Product name must be provided"],
@@ -23,31 +23,16 @@ const itemSchema = new mongoose.Schema({
     type: [String],
     required: [true, "Product image must be provided"],
   },
-});
-
-const categorySchema = new mongoose.Schema({
   category: {
     type: String,
-    required: [true, "Category must be provided"],
+    enum: {
+      values: ["electronics", "clothing", "home", "fitness", "toys"],
+      message: "{VALUE} is not supported",
+    },
   },
-  items: {
-    type: [itemSchema],
-    required: true,
-  },
-});
-
-const productSchema = new mongoose.Schema({
-  electronics: {
-    type: [categorySchema],
-  },
-  clothing: {
-    type: [categorySchema],
-  },
-  fitness: {
-    type: [categorySchema],
-  },
-  toys: {
-    type: [categorySchema],
+  section: {
+    type: String,
+    required: [true, "Product section must be provided"],
   },
 });
 
