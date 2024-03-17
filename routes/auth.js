@@ -30,10 +30,12 @@ router.get(
 
 // logout google
 router.get("/logout", (req, res) => {
-  req.logout();
-  req.session.destroy();
-  res.redirect("http://localhost:3001/home");
+  req.logout(req.user, (err) => {
+    if (err) return next(err);
+    res.redirect("http://localhost:3001/");
+  });
 });
+
 //reset password
 router.post("/forgotPassword", forgotPassword);
 router.put("/resetPassword/:resetToken", resetPassword);
